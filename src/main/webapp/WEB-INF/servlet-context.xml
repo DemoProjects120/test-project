@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+       <context:property-placeholder location="classpath:application.properties"/>
+
+       <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+              <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+              <property name="url" value="${db.url}"/>
+              <property name="username" value="${db.user}"/>
+              <property name="password" value="${db.password}"/>
+       </bean>
+
+       <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+              <property name="database" value="MYSQL"/>
+              <property name="generateDdl" value="true"/>
+              <property name="showSql" value="true"/>
+              <property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+       </bean>
+
+       <bean id="entityManagerFactoryBean" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" scope="singleton">
+              <property name="persistenceUnitName" value="persistenceUnit"/>
+              <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
+              <property name="packagesToScan" value="com.rootnext.testproject.domains"/>
+       </bean>
+       <bean id="entityManagerFactory" factory-bean="entityManagerFactoryBean" factory-method="c"/>
+
+       <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+              <property name="entityManagerFactory" ref="entityManagerFactory"/>
+       </bean>
+
+       <bean id="exceptionTranslation" class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+       <!--<jpa:repositories base-package="com.rootnext.testproject.repositories"/>-->
+
+</beans>
