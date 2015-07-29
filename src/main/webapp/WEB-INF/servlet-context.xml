@@ -22,12 +22,12 @@
               <property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
        </bean>
 
-       <bean id="entityManagerFactoryBean" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" scope="singleton">
+       <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" scope="singleton">
+              <property name="dataSource" ref="dataSource"/>
               <property name="persistenceUnitName" value="persistenceUnit"/>
+              <!--<property name="persistenceXmlLocation" value="/WEB-INF/META-INF/persistence.xml"/>-->
               <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
-              <property name="packagesToScan" value="com.rootnext.testproject.domains"/>
        </bean>
-       <bean id="entityManagerFactory" factory-bean="entityManagerFactoryBean" factory-method="c"/>
 
        <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
               <property name="entityManagerFactory" ref="entityManagerFactory"/>
